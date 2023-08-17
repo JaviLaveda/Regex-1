@@ -1,54 +1,64 @@
-//import "./style.css";
+import "./style.css";
 
-// console.log("Hello Typescript!");
+// btn increase turn
 
-interface Group {
-  name: string;
-  year: number;
-  active: boolean;
-  genre: string;
+function increase() {
+  // get value
+  const value = (document.getElementById("turn") as HTMLInputElement).value;
+  // increase value
+  const turn = parseInt(value) + 1;
+  // show new turn
+  const turnElement = document.getElementById("turn");
+
+  if (turnElement !== null && turnElement !== undefined) {
+    turnElement.innerHTML = turn.toString().padStart(2, "0");
+  }
 }
 
-const nameStyle = "background-color: green; font-size: 18px; font-style: bold;";
+const btnIncrease = document.getElementById("increase");
 
-const rock = "🎸Rock";
-const popRock = "🎵 Pop Rock";
-const heavy = "🤘 Hard Rock";
-const classic = "🎼 Clásica";
+if (btnIncrease !== null && btnIncrease !== undefined) {
+  btnIncrease.addEventListener("click", increase);
+}
 
-const grupoA: Group = {
-  name: "The Beatles",
-  year: 1960,
-  active: true,
-  genre: `${popRock}`,
-};
+// btn decrease turn
 
-const grupoB: Group = {
-  name: "Queen",
-  year: 1970,
-  active: false,
-  genre: `${rock}`,
-};
+function decrease() {
+  // get value
+  const value = (document.getElementById("turn") as HTMLInputElement).value;
+  // decrease value
+  const turn = parseInt(value) - 1;
+  // show new turn
+  const turnElement = document.getElementById("turn");
 
-const grupoC: Group = {
-  name: "AC DC",
-  year: 1960,
-  active: true,
-  genre: `${heavy}`,
-};
+  if (turnElement !== null && turnElement !== undefined) {
+    turnElement.innerHTML = turn.toString().padStart(2, "0");
+  }
+}
 
-const grupoD: Group = {
-  name: "Ludwig van Beethoven",
-  year: 1770,
-  active: false,
-  genre: `${classic}`,
-};
+const btnDecrease = document.getElementById("decrease");
 
-const grupoE: Group = {
-  name: "The Rolling Stones",
-  year: 1962,
-  active: true,
-  genre: `${rock}`,
-};
+if (btnDecrease !== null && btnDecrease !== undefined) {
+  btnDecrease.addEventListener("click", decrease);
+}
 
-console.log(grupoA, grupoB, grupoC, grupoD, grupoE);
+// btn reset turn
+
+function reset() {
+  // get value
+  const value = (document.getElementById("turn") as HTMLInputElement).value;
+  // decrease value
+  const turn = parseInt(value) - parseInt(value);
+  // show new turn
+  const turnElement = document.getElementById("turn");
+
+  if (turnElement !== null && turnElement !== undefined) {
+    turnElement.innerHTML = turn.toString().padStart(2, "0");
+  }
+}
+
+const btnReset = document.getElementById("reset");
+
+if (btnReset !== null && btnReset !== undefined) {
+  btnReset.addEventListener("click", reset);
+}
