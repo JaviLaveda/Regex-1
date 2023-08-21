@@ -11,7 +11,7 @@ import "./style.css";
 // NEXT BUTTON
 function next() {
   //get value
-  const turnValue = (document.getElementById("turn") as HTMLInputElement)
+  const turnValue = (document.getElementById("turn") as HTMLDivElement)
     .innerText;
   //operate
   const turnNext = parseInt(turnValue) + 1;
@@ -35,7 +35,7 @@ if (
 
 function back() {
   //get value
-  const turnValue = (document.getElementById("turn") as HTMLInputElement)
+  const turnValue = (document.getElementById("turn") as HTMLDivElement)
     .innerText;
   //operate
   const turnBack = parseInt(turnValue) - 1;
@@ -60,7 +60,7 @@ if (
 
 function reset() {
   //get value
-  const turnValue = (document.getElementById("turn") as HTMLInputElement)
+  const turnValue = (document.getElementById("turn") as HTMLDivElement)
     .innerText;
   //operate
   const turnReset = parseInt(turnValue) * 0;
