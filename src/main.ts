@@ -49,33 +49,37 @@ const input = () => {
 
 // BUTTONS
 
-// NEXT BUTTON
-const btnIncrease = document.getElementById("next");
+const events = () => {
+  // NEXT BUTTON
+  const btnIncrease = document.getElementById("next");
 
-if (btnIncrease && btnIncrease instanceof HTMLButtonElement) {
-  btnIncrease.addEventListener("click", next);
-}
+  if (btnIncrease && btnIncrease instanceof HTMLButtonElement) {
+    btnIncrease.addEventListener("click", next);
+  }
 
-// BACK BUTTON
+  // BACK BUTTON
 
-const btnBack = document.getElementById("back");
+  const btnBack = document.getElementById("back");
 
-if (btnBack && btnBack instanceof HTMLButtonElement) {
-  btnBack.addEventListener("click", back);
-}
+  if (btnBack && btnBack instanceof HTMLButtonElement) {
+    btnBack.addEventListener("click", back);
+  }
 
-// RESET BUTTON
+  // RESET BUTTON
 
-const btnReset = document.getElementById("reset");
+  const btnReset = document.getElementById("reset");
 
-if (btnReset && btnReset instanceof HTMLButtonElement) {
-  btnReset.addEventListener("click", reset);
-}
+  if (btnReset && btnReset instanceof HTMLButtonElement) {
+    btnReset.addEventListener("click", reset);
+  }
 
-// INPUT BUTTON
+  // INPUT BUTTON
 
-const btnInput = document.getElementById("okInput");
+  const btnInput = document.getElementById("okInput");
 
-if (btnInput && btnInput instanceof HTMLButtonElement) {
-  btnInput.addEventListener("click", input);
-}
+  if (btnInput && btnInput instanceof HTMLButtonElement) {
+    btnInput.addEventListener("click", input);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", events);
