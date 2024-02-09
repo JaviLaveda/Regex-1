@@ -1,85 +1,104 @@
-import "./style.css";
+import { obtenerPersonajes } from "./personajes-listado.api";
+import { urlHost, Personaje } from "./personajes-listado.model";
 
-// INITIAL VALUE
-let turnNumber: number = 0;
+const crearElementoImagen = (nombre: string): HTMLImageElement => {
+  const imagen = document.createElement("img");
+  imagen.src = `${urlHost}/${nombre}`;
+  return imagen;
+};
 
-// FUNCTIONS
+const crearElementoParrafo = (
+  campo: string,
+  texto: string
+): HTMLParagraphElement => {
+  const parrafo = document.createElement("p");
+  parrafo.textContent = campo + texto;
+  return parrafo;
+};
+const crearContenedorPersonaje = (personaje: Personaje): HTMLDivElement => {
+  const elementoPersonaje = document.createElement("div");
+  elementoPersonaje.classList.add("personaje-contenedor");
 
-const increase = () => turnNumber++;
+  const imagen = crearElementoImagen(personaje.imagen);
+  elementoPersonaje.appendChild(imagen);
 
-const decrease = () => turnNumber--;
+  const nombre = crearElementoParrafo("Nombre: ", personaje.nombre);
+  elementoPersonaje.appendChild(nombre);
 
-const toZero = () => (turnNumber = 0);
+  const apodo = crearElementoParrafo("Apodo: ", personaje.apodo);
+  elementoPersonaje.appendChild(apodo);
 
-const readInput = () => {
-  const inputValue = document.getElementById("input");
-  if (inputValue && inputValue instanceof HTMLInputElement) {
-    turnNumber = parseInt(inputValue.value);
+  const especialidad = crearElementoParrafo(
+    "Especialidad: ",
+    personaje.especialidad
+  );
+  elementoPersonaje.appendChild(especialidad);
+
+  const habilidades = crearElementoParrafo(
+    "Habilidades: ",
+    personaje.habilidades
+  );
+  elementoPersonaje.appendChild(habilidades);
+
+  const amigo = crearElementoParrafo("Amigo: ", personaje.amigo);
+  elementoPersonaje.appendChild(amigo);
+
+  return elementoPersonaje;
+};
+
+const pintarPersonajes = async (): Promise<void> => {
+  const personajes = await obtenerPersonajes();
+  const listado = document.querySelector("#listado-personajes");
+  if (listado && listado instanceof HTMLDivElement) {
+    personajes.forEach((personaje) => {
+      const contenedorPersonaje = crearContenedorPersonaje(personaje);
+      listado.appendChild(contenedorPersonaje);
+    });
+  } else {
+    throw new Error("No se ha encontrado el contenedor del listado");
   }
 };
 
-const updateUI = () => {
-  const turnValue = document.getElementById("turn");
-  if (turnValue && turnValue instanceof HTMLHeadingElement) {
-    turnValue.textContent = turnNumber.toString().padStart(2, "0");
+const obtenerTerminoBusqueda = (): string => {
+  const searchInput = document.getElementById(
+    "busquedaInput"
+  ) as HTMLInputElement;
+  return searchInput.value.toLowerCase().trim();
+};
+
+const pintarPersonajesFiltrados = async (): Promise<void> => {
+  const personajes = await obtenerPersonajes();
+  const terminoBusqueda = obtenerTerminoBusqueda();
+  const personajesFiltrados = personajes.filter((personaje) =>
+    personaje.nombre.toLowerCase().includes(terminoBusqueda)
+  );
+  const listado = document.querySelector("#listado-personajes");
+
+  if (listado && listado instanceof HTMLDivElement) {
+    if (personajesFiltrados.length === 0) {
+      listado.innerHTML = "<p>No se encontraron personajes.</p>";
+    } else {
+      listado.innerHTML = "";
+      personajesFiltrados.forEach((personaje) => {
+        const contenedorPersonaje = crearContenedorPersonaje(personaje);
+        listado.appendChild(contenedorPersonaje);
+      });
+    }
+  } else {
+    throw new Error("No se ha encontrado el contenedor del listado");
   }
 };
-
-const next = () => {
-  increase();
-  updateUI();
-};
-
-const back = () => {
-  if (turnNumber > 0) {
-    decrease();
-  }
-  updateUI();
-};
-
-const reset = () => {
-  toZero();
-  updateUI();
-};
-
-const input = () => {
-  readInput();
-  updateUI();
-};
-
-// BUTTONS
 
 const events = () => {
-  // NEXT BUTTON
-  const btnIncrease = document.getElementById("next");
-
-  if (btnIncrease && btnIncrease instanceof HTMLButtonElement) {
-    btnIncrease.addEventListener("click", next);
-  }
-
-  // BACK BUTTON
-
-  const btnBack = document.getElementById("back");
-
-  if (btnBack && btnBack instanceof HTMLButtonElement) {
-    btnBack.addEventListener("click", back);
-  }
-
-  // RESET BUTTON
-
-  const btnReset = document.getElementById("reset");
-
-  if (btnReset && btnReset instanceof HTMLButtonElement) {
-    btnReset.addEventListener("click", reset);
-  }
-
-  // INPUT BUTTON
-
-  const btnInput = document.getElementById("okInput");
-
-  if (btnInput && btnInput instanceof HTMLButtonElement) {
-    btnInput.addEventListener("click", input);
+  const btnFiltrar = document.getElementById("filtrarPersonaje");
+  if (btnFiltrar && btnFiltrar instanceof HTMLButtonElement) {
+    btnFiltrar.addEventListener("click", pintarPersonajesFiltrados);
+  } else {
+    throw new Error("ButtonElement not found");
   }
 };
 
-document.addEventListener("DOMContentLoaded", events);
+document.addEventListener("DOMContentLoaded", function () {
+  pintarPersonajes();
+  events();
+});

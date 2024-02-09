@@ -3,26 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your turn</title>
+    <title>Mortadelo y Filemón</title>
   </head>
   <body>
-    <div class="turno-display">
-      <h1 class="numero-turno" id="turn">00</h1>
-      <p class="texto-turno">Por favor, acérquese al mostrador</p>
-    </div>
+    <main>
+      <h1>Personajes de Mortadelo y Filemón</h1>
+      <div class="filtrar-contenedor">
+        <input
+          type="text"
+          id="busquedaInput"
+          placeholder="Filtrar por nombre..."
+        />
+        <button id="filtrarPersonaje">Filtrar</button>
+        <div id="characterList"></div>
+      </div>
+      <div id="listado-personajes" class="listado-personajes"></div>
+    </main>
 
-    <div class="btn-container">
-      <button id="back">Back</button>
-      <button id="reset">Reset</button>
-      <button id="next">Next</button>
-    </div>
-
-    <div class="input-turn">
-      <input id="input" />
-      <button id="okInput">Ok</button>
-    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
