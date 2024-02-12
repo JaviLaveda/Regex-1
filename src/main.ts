@@ -1,5 +1,13 @@
-import { obtenerPersonajes } from "./personajes-listado.api";
-import { urlHost, Personaje } from "./personajes-listado.model";
+import {
+  obtenerPersonajes,
+  // obtenerPersonajesFiltrados,
+} from "./personajes-listado.api";
+import {
+  urlHost,
+  urlHostPersonajes,
+  urlHostSearch,
+  Personaje,
+} from "./personajes-listado.model";
 
 const crearElementoImagen = (nombre: string): HTMLImageElement => {
   const imagen = document.createElement("img");
@@ -46,59 +54,81 @@ const crearContenedorPersonaje = (personaje: Personaje): HTMLDivElement => {
   return elementoPersonaje;
 };
 
-const pintarPersonajes = async (): Promise<void> => {
-  const personajes = await obtenerPersonajes();
-  const listado = document.querySelector("#listado-personajes");
-  if (listado && listado instanceof HTMLDivElement) {
-    personajes.forEach((personaje) => {
-      const contenedorPersonaje = crearContenedorPersonaje(personaje);
-      listado.appendChild(contenedorPersonaje);
-    });
-  } else {
-    throw new Error("No se ha encontrado el contenedor del listado");
-  }
+const crearContenedoresPersonajes = (
+  listado: HTMLDivElement,
+  personajes: Personaje[]
+) => {
+  personajes.forEach((personaje) => {
+    const contenedorPersonaje = crearContenedorPersonaje(personaje);
+    listado.appendChild(contenedorPersonaje);
+  });
 };
 
 const obtenerTerminoBusqueda = (): string => {
-  const searchInput = document.getElementById(
-    "busquedaInput"
-  ) as HTMLInputElement;
-  return searchInput.value.toLowerCase().trim();
+  const searchInput = document.getElementById("busquedaInput");
+  if (searchInput && searchInput instanceof HTMLInputElement) {
+    return searchInput.value.toLowerCase().trim();
+  } else {
+    throw new Error("No se ha encontrado el input");
+  }
 };
 
-const pintarPersonajesFiltrados = async (): Promise<void> => {
-  const personajes = await obtenerPersonajes();
-  const terminoBusqueda = obtenerTerminoBusqueda();
-  const personajesFiltrados = personajes.filter((personaje) =>
-    personaje.nombre.toLowerCase().includes(terminoBusqueda)
-  );
-  const listado = document.querySelector("#listado-personajes");
+const mensajeErrorListadoPersonajes = (listado: HTMLDivElement) => {
+  listado.innerHTML = "<p>No se encontraron personajes.</p>";
+};
 
+const vaciarListadoPersonajes = (listado: HTMLDivElement) => {
+  listado.innerHTML = "";
+};
+
+const creaListadoPersonajes = (personajes: Personaje[]) => {
+  const listado = document.querySelector("#listado-personajes");
   if (listado && listado instanceof HTMLDivElement) {
-    if (personajesFiltrados.length === 0) {
-      listado.innerHTML = "<p>No se encontraron personajes.</p>";
-    } else {
-      listado.innerHTML = "";
-      personajesFiltrados.forEach((personaje) => {
-        const contenedorPersonaje = crearContenedorPersonaje(personaje);
-        listado.appendChild(contenedorPersonaje);
-      });
-    }
+    crearContenedoresPersonajes(listado, personajes);
   } else {
     throw new Error("No se ha encontrado el contenedor del listado");
   }
 };
 
-const events = () => {
-  const btnFiltrar = document.getElementById("filtrarPersonaje");
-  if (btnFiltrar && btnFiltrar instanceof HTMLButtonElement) {
-    btnFiltrar.addEventListener("click", pintarPersonajesFiltrados);
+const creaListadoPersonajesFiltrados = (personajes: Personaje[]) => {
+  const listado = document.querySelector("#listado-personajes");
+  if (personajes.length === 0 && listado && listado instanceof HTMLDivElement) {
+    mensajeErrorListadoPersonajes(listado);
+  } else if (listado && listado instanceof HTMLDivElement) {
+    vaciarListadoPersonajes(listado);
+    crearContenedoresPersonajes(listado, personajes);
   } else {
-    throw new Error("ButtonElement not found");
+    throw new Error("No se ha encontrado el contenedor del listado");
+  }
+};
+
+const mostrarPersonajes = async (): Promise<void> => {
+  const personajes = await obtenerPersonajes(urlHostPersonajes);
+
+  creaListadoPersonajes(personajes);
+};
+
+const mostrarPersonajesFiltrados = async (event: Event): Promise<void> => {
+  event.preventDefault();
+
+  const terminoBusqueda = obtenerTerminoBusqueda();
+  const personajesFiltrados = await obtenerPersonajes(
+    `${urlHostSearch}${terminoBusqueda}`
+  );
+
+  creaListadoPersonajesFiltrados(personajesFiltrados);
+};
+
+const events = () => {
+  const formulario = document.querySelector("#formulario");
+  if (formulario && formulario instanceof HTMLFormElement) {
+    formulario.addEventListener("submit", mostrarPersonajesFiltrados);
+  } else {
+    throw new Error("FormElement not found");
   }
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-  pintarPersonajes();
+  mostrarPersonajes();
   events();
 });
