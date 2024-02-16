@@ -5,22 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mortadelo y Filemón</title>
+    <title>Buscador de IBAN</title>
   </head>
   <body>
     <main>
-      <h1>Personajes de Mortadelo y Filemón</h1>
-      <div class="filtrar-contenedor">
-        <form class="contendor-form" id="formulario">
-          <input
-            id="busquedaInput"
-            placeholder="Filtrar por nombre..."
-            type="text"
-          />
-          <button type="submit">Filtrar</button>
-        </form>
+      <form id="formulario">
+        <label for="">Introduzca el IBAN</label>
+        <input
+          id="busquedaInput"
+          type="text"
+          placeholder="ES **** **** ** **********"
+        />
+        <button type="submit">Buscar</button>
+      </form>
+      <div class="iban-card">
+        <div id="formatoIban"></div>
+        <div id="validaIban"></div>
+        <div id="detallesIban"></div>
       </div>
-      <div id="listado-personajes" class="listado-personajes"></div>
     </main>
 
     <script type="module" src="/src/main.ts"></script>
